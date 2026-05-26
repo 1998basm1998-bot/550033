@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevStudio - نظام التطوير والمعاينة الذكي</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- خط القاهرة المريح وأيقونات FontAwesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body data-theme="dark">
+
+    <!-- 1. شريط التنقل الجانبي الثابت -->
+    <nav class="sidebar">
+        <div class="sidebar-logo"><i class="fa-solid fa-square-terminal"></i></div>
+        <button class="sidebar-btn active" id="btn-tab-dev" onclick="switchMainTab('dev')" title="غرفة التطوير والمطابقة">
+            <i class="fa-solid fa-laptop-code"></i>
+        </button>
+        <button class="sidebar-btn" id="btn-tab-settings" onclick="switchMainTab('settings')" title="الإعدادات وقفل الـ API">
+            <i class="fa-solid fa-sliders"></i>
+        </button>
+        <div class="sidebar-footer">
+            <span id="global-cost-display" title="إجمالي استهلاك الرصيد الحالي"><i class="fa-solid fa-wallet"></i> $0.0000</span>
+        </div>
+    </nav>
+
+    <!-- الحاوية الكلية للتطبيق -->
+    <div class="app-container">
+        
+        <!-- التبويب الأول: غرفة التطوير والمعاينة الحية -->
+        <div id="tab-dev" class="main-tab-content active">
+            
+            <!-- الجزء الأيسر والأوسط: المحادثة ومحرر الأكواد -->
+            <div class="left-workspace" id="left-workspace">
+                
+                <!-- أ. قسم المحادثة وصندوق التحكم -->
+                <section class="chat-panel">
+                    <div class="panel-header">
+                        <span><i class="fa-solid fa-comments-mocha"></i> المساعد الهندسي الذكي</span>
+                        <div class="top-preview-selector">
+                            <label>الهدف الأولي لجلب GitHub:</label>
+                            <select id="github-target-select">
+                                <option value="user-app">واجهة تطبيق المستخدم (Client)</option>
+                                <option value="admin-app">لوحة تحكم المسؤول (Admin)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- شاشة عرض الرسائل ومراحل التفكير -->
+                    <div class="chat-messages" id="chat-messages">
+                        <div class="message ai">
+                            مرحباً باسم! أنا مستشار الأنظمة ومساعدك البرمجي الحركي. 
+                            <br><br>
+                            يمكنك الآن جلب مشروعك مباشرة من **GitHub** لتوزيع الملفات في الشاشات الجانبية وتفعيل المعاينة الحية. تحكم بمستويات الذكاء الثلاثة فوق مستطيل الكتابة لإدارة ميزانيتك وحل الأخطاء الجراحية الموضعية دون تخريب الأكواد السابقة.
+                        </div>
+                    </div>
+
+                    <!-- شريط التحكم السفلي (جلب GitHub + أزرار النماذج + حقل النص) -->
+                    <div class="chat-control-area">
+                        
+                        <!-- بار جلب ملفات GitHub مع خط الأنميشن الحقيقي -->
+                        <div class="github-container">
+                            <div class="github-bar">
+                                <i class="fa-brands fa-github"></i>
+                                <input type="text" id="github-url-input" placeholder="github.com/username/repository">
+                                <button class="github-btn" onclick="triggerGitHubImport()">جلب الملفات</button>
+                            </div>
+                            <!-- خط التحميل الأنميشن المتدرج الخفي ويظهر عند الجلب -->
+                            <div class="github-progress-wrapper" id="github-progress-wrapper">
+                                <div class="github-progress-line" id="github-progress-line">
+                                    <div class="progress-glow"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- أزرار التبديل الثلاثية لمستويات الذكاء الاصطناعي -->
+                        <div class="model-switcher-bar">
+                            <button class="model-btn active" id="btn-model-flash" onclick="setAIModel('flash')">
+                                <i class="fa-solid fa-bolt"></i> اقتصادي (Flash)
+                            </button>
+                            <button class="model-btn" id="btn-model-pro" onclick="setAIModel('pro')">
+                                <i class="fa-solid fa-microchip"></i> برو (Pro)
+                            </button>
+                            <button class="model-btn" id="btn-model-deep" onclick="setAIModel('deep')">
+                                <i class="fa-solid fa-brain"></i> تفكير عميق (Reasoning)
+                            </button>
+                        </div>
+
+                        <!-- حقل كتابة الأوامر البرمجية المباشر -->
+                        <div class="chat-input-box">
+                            <textarea id="chat-input" placeholder="اطلب تعديل موضعي، أو قل لي 'ابني نظام الأدمن' لفتح المعاينة المزدوجة المتزامنة..."></textarea>
+                            <button class="send-message-btn" onclick="processChatMessage()"><i class="fa-solid fa-paper-plane-top"></i></button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ب. قسم محرر الأكواد الجانبي الديناميكي -->
+                <section class="code-panel">
+                    <div class="panel-header-tabs" id="code-tabs-container">
+                        <button class="code-tab-btn active" onclick="switchCodeFile('user-app')">تطبيق المستخدم</button>
+                        <button class="code-tab-btn" id="tab-btn-admin" onclick="switchCodeFile('admin-app')">لوحة التحكم (الأدمن)</button>
+                    </div>
+                    <div class="editor-workspace">
+                        <div class="editor-action-overlay">
+                            <button class="editor-action-btn" onclick="copyCurrentCode()"><i class="fa-solid fa-copy"></i> نسخ</button>
+                            <button class="editor-action-btn run" onclick="forceUpdatePreview()"><i class="fa-solid fa-rotate"></i> تحديث يدوي</button>
+                        </div>
+                        <textarea id="code-editor-textarea" spellcheck="false" placeholder="هنا تظهر الشفرات المصدرية البرمجية للمشروع..."></textarea>
+                    </div>
+                </section>
+
+            </div>
+
+            <!-- العازل / الخط الفاصل القابل للسحب والتحريك يميناً ويساراً -->
+            <div class="drag-resizable-bar" id="drag-resizable-bar" title="اسحب يميناً أو يساراً لتكبير/تصغير شاشات المعاينة">
+                <div class="drag-indicator-line"></div>
+            </div>
+
+            <!-- الجزء الأيمن: شاشات المعاينة الحية المزدوجة وقاعدة البيانات -->
+            <div class="right-preview-workspace" id="right-preview-workspace">
+                
+                <!-- البار العلوي للمعاينة (التحكم الخارجي وقواعد البيانات) -->
+                <div class="preview-control-toolbar">
+                    <div class="toolbar-db-switches">
+                        <!-- زر تفعيل قاعدة البيانات المحلية -->
+                        <button class="db-toggle-btn active" id="btn-db-local" onclick="toggleDatabaseMode('local')">
+                            <i class="fa-solid fa-database"></i> قاعدة بيانات محلية (Sandbox)
+                        </button>
+                        <!-- زر تفعيل قاعدة البيانات الحقيقية بفحصه الآمن -->
+                        <button class="db-toggle-btn" id="btn-db-real" onclick="toggleDatabaseMode('real')">
+                            <i class="fa-solid fa-cloud-network-sharing"></i> قاعدة بيانات حقيقية
+                        </button>
+                    </div>
+                    <!-- زر توليد معاينة خارجية مستقلة تماماً -->
+                    <button class="external-preview-btn" onclick="generateExternalPreviewLink()">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i> معاينة خارجية مستقلة
+                    </button>
+                </div>
+
+                <!-- نوافذ المعاينة الحية للمشروع (تطبيق المستخدم + لوحة التحكم جنباً إلى جنب أو تفتح ديناميكياً) -->
+                <div class="preview-frames-split-container" id="preview-frames-split-container">
+                    
+                    <!-- نافذة معاينة تطبيق المستخدم (محاكاة أبعاد الجوال الافتراضية للتجربة) -->
+                    <div class="preview-frame-wrapper" id="preview-user-wrapper">
+                        <div class="frame-label-header"><i class="fa-solid fa-mobile-screen-button"></i> واجهة المتجر / التطبيق (جوال)</div>
+                        <div class="iframe-inner-holder user-phone-mode">
+                            <iframe id="iframe-user-app" class="preview-iframe"></iframe>
+                        </div>
+                    </div>
+
+                    <!-- نافذة معاينة لوحة التحكم (الأدمن) وتفتح ديناميكياً بجانب الأولى للتحكم الكامل -->
+                    <div class="preview-frame-wrapper hidden" id="preview-admin-wrapper">
+                        <div class="frame-label-header"><i class="fa-solid fa-chart-line-up"></i> لوحة التحكم الإدارية (Admin Panel)</div>
+                        <div class="iframe-inner-holder">
+                            <iframe id="iframe-admin-app" class="preview-iframe"></iframe>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- التبويب الثاني: شاشة الإعدادات والتحكم بالـ API والمظهر -->
+        <div id="tab-settings" class="main-tab-content">
+            <div class="settings-view-wrapper">
+                <h2>إعدادات بيئة التطوير المحلية المهيأة</h2>
+                <p class="subtitle">قم بتهيئة مفاتيح الربط لتفعيل الاتصال المباشر مع سيرفرات جوجل وجيتهب بأمان محلي كامل.</p>
+                
+                <div class="setting-card-group">
+                    <label><i class="fa-solid fa-key"></i> مفتاح واجهة برمجة تطبيقات جوجل (Gemini API Key)</label>
+                    <div class="input-password-wrapper">
+                        <input type="password" id="input-gemini-key" placeholder="أدخل رمز الـ API Key الخاص بك هنا (AIzaSy...)">
+                        <button type="button" onclick="toggleInputVisibility('input-gemini-key')"><i class="fa-solid fa-eye"></i></button>
+                    </div>
+                    <span class="input-tip">مفتاحك يتم حفظه محلياً في متصفحك الشخصي عبر الـ localStorage ولا يمر على أي خادم وسيط.</span>
+                </div>
+
+                <div class="setting-card-group">
+                    <label><i class="fa-brands fa-github"></i> رمز أمان مستودعات جيتهب الخاصة (GitHub Access Token - اختياري)</label>
+                    <div class="input-password-wrapper">
+                        <input type="password" id="input-github-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx">
+                        <button type="button" onclick="toggleInputVisibility('input-github-token')"><i class="fa-solid fa-eye"></i></button>
+                    </div>
+                    <span class="input-tip">مطلوب فقط إذا كنت تريد جلب ملفات من مستودع شخصي مشفر (Private Repository).</span>
+                </div>
+
+                <div class="setting-card-group theme-card-row">
+                    <div class="theme-info-text">
+                        <label><i class="fa-solid fa-circle-half-stroke"></i> مظهر الواجهة البصري</label>
+                        <span>اختر نمط الرؤية المريح لعينك أثناء سهرك على تتبع الأكواد وحل المشكلات.</span>
+                    </div>
+                    <button class="theme-switch-toggle-btn" onclick="toggleInterfaceTheme()">
+                        <i class="fa-solid fa-moon"></i> وضع ليلي متوهج (Glassmorphism)
+                    </button>
+                </div>
+
+                <button class="global-save-settings-btn" onclick="commitGlobalSettings()">
+                    <i class="fa-solid fa-floppy-disk"></i> حفظ وتفعيل الإعدادات فوراً
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

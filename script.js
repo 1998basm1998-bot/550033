@@ -95,15 +95,15 @@ function setPreviewMode(mode) {
     if(mode === 'user') {
         userWrp.classList.remove('hidden');
         adminWrp.classList.add('hidden');
-        adminInner.classList.remove('user-phone-mode');
+        if (adminInner) adminInner.classList.remove('user-phone-mode');
     } else if(mode === 'admin') {
         userWrp.classList.add('hidden');
         adminWrp.classList.remove('hidden');
-        adminInner.classList.remove('user-phone-mode');
+        if (adminInner) adminInner.classList.remove('user-phone-mode');
     } else if(mode === 'both') {
         userWrp.classList.remove('hidden');
         adminWrp.classList.remove('hidden');
-        adminInner.classList.add('user-phone-mode');
+        if (adminInner) adminInner.classList.add('user-phone-mode');
         rightWorkspace.style.width = '70%';
         leftWorkspace.style.width = '30%';
     }
@@ -178,7 +178,7 @@ function generateExternalPreviewLink() {
     window.open(externalUrl, '_blank');
 }
 
-// محادثة الذكاء الاصطناعي الحقيقية باستخدام مكتبة Google GenAI SDK الرسمية
+// التعديل الجوهري: ربط حقيقي مباشر بـ OpenRouter متوافق مع شحن حسابك ومفتاحك البرمجي الجديد
 async function processChatMessage() {
     const inputEl = document.getElementById('chat-input');
     const chatContainer = document.getElementById('chat-messages');
@@ -193,11 +193,11 @@ async function processChatMessage() {
     const aiMessageId = 'ai-node-' + Date.now();
     
     let thinkingHtml = '<div class="thinking-box-realtime" id="think-box-' + aiMessageId + '">' +
-        '<div class="thinking-node" id="step1-' + aiMessageId + '"><i class="fa-solid fa-spinner fa-spin"></i> <span>جاري المعالجة والاتصال بالخادم...</span></div>' +
+        '<div class="thinking-node" id="step1-' + aiMessageId + '"><i class="fa-solid fa-spinner fa-spin"></i> <span>جاري الاتصال بـ OpenRouter وتوليد الكود...</span></div>' +
     '</div>';
     
     chatContainer.innerHTML += '<div class="message ai" id="' + aiMessageId + '">' +
-        '<div class="ai-text-content"><i class="fa-solid fa-arrows-spin fa-spin"></i> يتم تحضير الرد...</div>' +
+        '<div class="ai-text-content"><i class="fa-solid fa-arrows-spin fa-spin"></i> جاري معالجة الطلب برمجياً...</div>' +
         thinkingHtml +
     '</div>';
     chatContainer.scrollTop = chatContainer.scrollHeight;
@@ -206,33 +206,51 @@ async function processChatMessage() {
     let responseMessage = '';
     let inTokens = queryText.length;
     let outTokens = 150; 
-    let aiError = false;
+
+    // تحديد الموديل بناءً على خيار المستخدم من الواجهة
+    let openrouterModel = "google/gemini-2.5-flash"; 
+    if(selectedAIModel === 'pro') openrouterModel = "google/gemini-2.5-pro";
+    if(selectedAIModel === 'deep') openrouterModel = "google/gemini-2.5-flash"; // أو يمكنك التبديل لأي موديل تفكير مدعوم في حسابك
 
     if(apiKey && apiKey.trim().length > 10) {
         try {
-            // الاستيراد الديناميكي للمكتبة الرسمية الجاهزة لبيئات الإنتاج
-            const { GoogleGenerativeAI } = await import('https://esm.run/@google/generative-ai');
-            const genAI = new GoogleGenerativeAI(apiKey);
-            
-            let modelName = selectedAIModel === 'flash' ? 'gemini-1.5-flash' : 'gemini-1.5-pro';
-            const model = genAI.getGenerativeModel({ model: modelName });
-            
-            const result = await model.generateContent(queryText + " (رد باختصار باللغة العربية وفي صلب الكود البرمجي)");
-            const response = await result.response;
-            
-            responseMessage = response.text().replace(/\n/g, '<br>');
-            
-            // استخراج استهلاك التوكنز الدقيق من الـ SDK
-            if(response.usageMetadata) {
-                inTokens = response.usageMetadata.promptTokenCount || inTokens;
-                outTokens = response.usageMetadata.candidatesTokenCount || outTokens;
+            const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${apiKey}`,
+                    "Content-Type": "application/json",
+                    "HTTP-Referer": window.location.origin,
+                    "X-Title": "DevStudio Live"
+                },
+                body: JSON.stringify({
+                    "model": openrouterModel,
+                    "messages": [
+                        { "role": "user", "content": queryText + " (رد باللغة العربية وركز على تقديم الأكواد البرمجية المطلوبة بوضوح وبطريقة مباشرة)" }
+                    ]
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.choices && data.choices[0]) {
+                responseMessage = data.choices[0].message.content.replace(/\n/g, '<br>');
+                
+                // جلب التوكنات الفعلية من استجابة OpenRouter لفوترتها بالواجهة
+                if(data.usage) {
+                    inTokens = data.usage.prompt_tokens || inTokens;
+                    outTokens = data.usage.completion_tokens || outTokens;
+                }
+            } else {
+                responseMessage = "تنبيه: فشل استلام رد صحيح من السيرفر. تأكد من شحن حسابك في OpenRouter (Credits) وتفعيل الفواتير.";
+                if(data.error) {
+                    responseMessage += "<br><span style='color:#ff6b6b;'>السبب: " + data.error.message + "</span>";
+                }
             }
         } catch(e) {
-            aiError = true;
-            responseMessage = "حدث خطأ أثناء الاتصال بالـ API: " + e.message;
+            responseMessage = "حدث خطأ غير متوقع أثناء معالجة الاتصال: " + e.message;
         }
     } else {
-        responseMessage = "تنبيه: أنت تستخدم وضع المحاكاة الافتراضي. لربط الذكاء الاصطناعي الحقيقي، أدخل مفتاح API في الإعدادات.<br> تم استلام طلبك وتحديث الشاشات.";
+        responseMessage = "تنبيه: أنت تستخدم وضع المحاكاة الافتراضي. لربط الذكاء الاصطناعي الحقيقي، اذهب لتبويبة الإعدادات وأدخل مفتاح API الذي يبدأ بـ (sk-or-...) ثم اضغط حفظ.";
         if(queryText.includes('الأدمن') || queryText.includes('ابني')) {
             setPreviewMode('both');
         }
@@ -242,15 +260,16 @@ async function processChatMessage() {
     let textContainer = aiBox.querySelector('.ai-text-content');
     textContainer.innerHTML = responseMessage;
     
-    let costRate = selectedAIModel === 'flash' ? 0.000000075 : 0.0000035; 
-    let costOutRate = selectedAIModel === 'flash' ? 0.0000003 : 0.0000105;
+    // حساب أسعار الاستهلاك التقريبية للمقاييس
+    let costRate = selectedAIModel === 'pro' ? 0.0000025 : 0.000000075; 
+    let costOutRate = selectedAIModel === 'pro' ? 0.0000100 : 0.0000003;
     let totalCostDollars = (inTokens * costRate) + (outTokens * costOutRate);
     let cents = (totalCostDollars * 100).toFixed(4); 
     
     let tBox = document.getElementById('think-box-' + aiMessageId);
     tBox.innerHTML = '<div class="tokens-cost-summary">' +
         '<span><i class="fa-solid fa-microchip"></i> رموز المدخلات: ' + inTokens + ' | المخرجات: ' + outTokens + '</span>' +
-        '<span>التكلفة الفعلية: ¢' + cents + ' سنت</span>' +
+        '<span>التكلفة التقريبية: ¢' + cents + ' سنت</span>' +
     '</div>';
     
     let currentGlobal = parseFloat(document.getElementById('global-cost-display').innerText.replace(/[^0-9.]/g, '')) || 0;

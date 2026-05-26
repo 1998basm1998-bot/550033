@@ -1,3 +1,4 @@
+/* المتغيرات الأساسية للمظهر والشفافيات والتأثيرات الزجاجية للوضع الليلي المطور والنهاري */
 :root {
     --bg-main: #0b0f19;
     --panel-glass: rgba(22, 30, 49, 0.65);
@@ -31,7 +32,6 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    user-select: none;
 }
 
 body {
@@ -41,10 +41,10 @@ body {
     height: 100vh;
     display: flex;
     overflow: hidden;
-    transition: background-color 0.4s ease;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* 1. شريط التنقل الجانبي الاحترافي */
+/* شريط التنقل الجانبي المستوحى من منصات الإنتاجية الاحترافية */
 .sidebar {
     width: 80px;
     background-color: var(--sidebar-bg);
@@ -75,7 +75,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s ease;
 }
 
 .sidebar-btn:hover {
@@ -97,7 +97,7 @@ body {
     text-align: center;
 }
 
-/* حاوية التطبيق الكلية للتنقل */
+/* حاوية التطبيق الرئيسية الفلكسية */
 .app-container {
     flex-grow: 1;
     height: 100%;
@@ -114,25 +114,17 @@ body {
     display: flex;
 }
 
-/* 2. غرفة التطوير المقسمة هيدروليكياً */
-.dev-container {
-    display: flex;
-    width: 100%;
-    height: 100%;
-}
-
-/* النصف الأيسر: شاشات المحادثة والمحرر النصي الجانبي */
+/* تخطيط مساحة العمل اليسرى المقسمة لنص المحادثة وشاشة المحرر الجانبية */
 .left-workspace {
-    width: 50%; /* القيمة الافتراضية قبل التحريك والسحب */
-    min-width: 30%;
+    width: 50%; /* المساحة الافتراضية قبل تحريك الخط الفاصل */
+    min-width: 25%;
     max-width: 80%;
     height: 100%;
     display: grid;
-    grid-template-columns: 1fr 1fr; /* انقسام متساوي للمحادثة والمحرر */
+    grid-template-columns: 1fr 1fr;
     background: transparent;
 }
 
-/* الأنماط المشتركة للبانلات */
 .chat-panel, .code-panel, .preview-section {
     height: 100%;
     display: flex;
@@ -167,7 +159,7 @@ body {
     outline: none;
 }
 
-/* صندوق عرض الرسائل السلس */
+/* حاوية الرسائل والمحادثة النصية الممتدة */
 .chat-messages {
     flex-grow: 1;
     overflow-y: auto;
@@ -183,7 +175,6 @@ body {
     line-height: 1.6;
     font-size: 13.5px;
     max-width: 92%;
-    user-select: text;
 }
 
 .message.user {
@@ -199,7 +190,7 @@ body {
     align-self: flex-end;
 }
 
-/* شاشة عرض مراحل التفكير الفنية الحية والتوكنات */
+/* صناديق مراحل تفكير Gemini وعرض التوكنات وتكاليف الفاتورة المالية الحقيقية */
 .thinking-box-realtime {
     margin-top: 12px;
     padding: 10px 12px;
@@ -209,7 +200,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 6px;
-    background: rgba(0,0,0,0.1);
+    background: rgba(0,0,0,0.15);
     border-radius: 6px;
 }
 
@@ -219,13 +210,13 @@ body {
     gap: 8px;
 }
 
+.thinking-node.hidden {
+    display: none !important;
+}
+
 .thinking-node i {
     font-size: 9px;
     color: var(--accent-green);
-}
-
-.thinking-node i.fa-spinner {
-    animation: spin 1s infinite linear;
 }
 
 .tokens-cost-summary {
@@ -238,7 +229,7 @@ body {
     justify-content: space-between;
 }
 
-/* شريط التحكم السفلي المدمج والمطور */
+/* لوحة التحكم السفلية لـ صندوق جلب GitHub وأزرار مستويات الذكاء */
 .chat-control-area {
     padding: 18px;
     border-top: 1px solid var(--border-glass);
@@ -248,7 +239,6 @@ body {
     gap: 12px;
 }
 
-/* صندوق جلب مستودعات GitHub */
 .github-container {
     width: 100%;
     display: flex;
@@ -293,7 +283,7 @@ body {
     cursor: pointer;
 }
 
-/* خط الأنميشن الخرافي لجلب ملفات جيتهب */
+/* خط تحميل جلب الأكواد من GitHub ذو الأنميشن والنبض الحركي الموجه */
 .github-progress-wrapper {
     width: 100%;
     height: 4px;
@@ -303,7 +293,7 @@ body {
     position: absolute;
     bottom: 0;
     left: 0;
-    display: none; /* يتم إظهاره عبر الجافا سكريبت */
+    display: none;
 }
 
 .github-progress-line {
@@ -323,7 +313,7 @@ body {
     animation: wave-glow 1.2s infinite linear;
 }
 
-/* أزرار مستويات الذكاء الاصطناعي الثلاثة */
+/* أشرطة مستويات أزرار الذكاء الثلاثية المحترفة */
 .model-switcher-bar {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -344,17 +334,15 @@ body {
     align-items: center;
     justify-content: center;
     gap: 6px;
-    transition: all 0.25s ease;
+    transition: all 0.2s ease;
 }
 
 .model-btn.active {
     border-color: var(--accent-green);
     color: var(--accent-green);
     background: rgba(16, 185, 129, 0.08);
-    text-shadow: 0 0 8px var(--accent-glow);
 }
 
-/* حقل إدخال الدردشة الرئيسي */
 .chat-input-box {
     display: flex;
     background: var(--input-inner);
@@ -375,7 +363,6 @@ body {
     resize: none;
     height: 38px;
     outline: none;
-    padding-top: 4px;
 }
 
 .send-message-btn {
@@ -384,24 +371,13 @@ body {
     color: var(--accent-green);
     font-size: 18px;
     cursor: pointer;
-    padding: 0 5px;
-    transition: transform 0.2s;
 }
 
-.send-message-btn:active {
-    transform: scale(0.9);
-}
-
-/* ب. محرر الأكواد الجانبي المتطور */
-.code-panel {
-    border-left: 1px solid var(--border-glass);
-}
-
+/* تبويبات وأقسام محرر الشفرة الجانبي والمربعات البرمجية */
 .panel-header-tabs {
     display: flex;
     background: rgba(0, 0, 0, 0.2);
     border-bottom: 1px solid var(--border-glass);
-    overflow-x: auto;
 }
 
 .code-tab-btn {
@@ -414,7 +390,6 @@ body {
     cursor: pointer;
     border-left: 1px solid var(--border-glass);
     position: relative;
-    white-space: nowrap;
 }
 
 .code-tab-btn.active {
@@ -450,8 +425,6 @@ body {
 
 .editor-action-btn {
     background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
     border: 1px solid var(--border-glass);
     color: var(--text-primary);
     padding: 4px 10px;
@@ -475,13 +448,13 @@ body {
     outline: none;
     padding: 20px;
     color: var(--code-color);
-    font-family: 'Courier New', Courier, monospace;
+    font-family: monospace;
     font-size: 13.5px;
     line-height: 1.6;
     direction: ltr;
 }
 
-/* 3. العازل الفاصل القابل للسحب والتحريك (الميزة الجوهرية) */
+/* 3. العازل الفاصل اليدوي الهيدروليكي - ركيزة التحكم الجوهرية بالتوسيع والتصغير */
 .drag-resizable-bar {
     width: 8px;
     height: 100%;
@@ -489,14 +462,13 @@ body {
     cursor: col-resize;
     position: relative;
     z-index: 90;
-    transition: background 0.2s;
     border-left: 1px solid var(--border-glass);
     border-right: 1px solid var(--border-glass);
+    transition: background 0.2s;
 }
 
 .drag-resizable-bar:hover, .drag-resizable-bar:active {
     background: var(--accent-green);
-    box-shadow: 0 0 10px var(--accent-green);
 }
 
 .drag-indicator-line {
@@ -510,9 +482,9 @@ body {
     border-radius: 1px;
 }
 
-/* النصف الأيمن: شاشات المعاينة الحية الحرة وقواعد البيانات */
+/* مساحة البانل الأيمن للمعاينة المتزامنة وقواعد البيانات الحرة */
 .right-preview-workspace {
-    width: 50%; /* مكمل للنصف الأيسر وبيتغير مرناً بالجافا سكريبت */
+    width: 50%; /* مكملة لنسب مساحة الشاشة الحركية ويتم التعديل عليها تلقائياً عبر سحب الخط الفاصل */
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -550,6 +522,7 @@ body {
     color: var(--accent-green);
 }
 
+/* كود حماية الأمان الصامت لزر قواعد البيانات في حال غياب مفاتيح الإعدادات لمنع خراب الواجهات */
 .db-toggle-btn.failed-safe {
     border-color: #f59e0b !important;
     color: #f59e0b !important;
@@ -567,14 +540,13 @@ body {
     cursor: pointer;
 }
 
-/* حاوية نوافذ الـ iframes المنفصلة التفاعلية */
+/* تقسيم نوافذ الـ iframes التفاعلية المزدوجة ومحاكاة الجوال */
 .preview-frames-split-container {
     flex-grow: 1;
     display: flex;
     padding: 20px;
     gap: 20px;
     background: rgba(0, 0, 0, 0.05);
-    overflow: auto;
 }
 
 .preview-frame-wrapper {
@@ -583,8 +555,7 @@ body {
     flex-direction: column;
     gap: 10px;
     height: 100%;
-    min-width: 280px;
-    transition: all 0.3s ease;
+    min-width: 250px;
 }
 
 .preview-frame-wrapper.hidden {
@@ -595,9 +566,6 @@ body {
     font-size: 12.5px;
     font-weight: 600;
     color: var(--text-muted);
-    display: flex;
-    align-items: center;
-    gap: 6px;
 }
 
 .iframe-inner-holder {
@@ -605,12 +573,10 @@ body {
     background: white;
     border-radius: 14px;
     overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    position: relative;
     border: 1px solid var(--border-glass);
 }
 
-/* محاكاة واجهة الجوال لتطبيق الكلاينت (المستخدم) */
+/* محاكاة قياسات الهاتف المحمول المخصص لواجهة تطبيق المستخدم لسهولة التجربة */
 .iframe-inner-holder.user-phone-mode {
     max-width: 380px;
     height: 100%;
@@ -623,17 +589,14 @@ body {
     width: 100%;
     height: 100%;
     border: none;
-    background: #ffffff;
 }
 
-/* 4. شاشة الإعدادات والـ API */
+/* تصميم شاشة وعناصر كروت الإعدادات المتقدمة الـ Settings */
 .settings-view-wrapper {
-    max-width: 700px;
-    margin: 60px auto;
+    max-width: 650px;
+    margin: 50px auto;
     padding: 35px;
     background: var(--panel-glass);
-    backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
     border-radius: 18px;
     border: 1px solid var(--border-glass);
     display: flex;
@@ -642,12 +605,11 @@ body {
 }
 
 .settings-view-wrapper h2 {
-    font-size: 22px;
-    font-weight: 700;
+    font-size: 20px;
 }
 
 .settings-view-wrapper .subtitle {
-    font-size: 13.5px;
+    font-size: 13px;
     color: var(--text-muted);
     margin-top: -15px;
     border-bottom: 1px solid var(--border-glass);
@@ -658,11 +620,6 @@ body {
     display: flex;
     flex-direction: column;
     gap: 8px;
-}
-
-.setting-card-group label {
-    font-size: 13.5px;
-    font-weight: 600;
 }
 
 .input-password-wrapper {
@@ -691,11 +648,6 @@ body {
     cursor: pointer;
 }
 
-.input-tip {
-    font-size: 11px;
-    color: var(--text-muted);
-}
-
 .theme-card-row {
     flex-direction: row;
     justify-content: space-between;
@@ -703,13 +655,11 @@ body {
     background: rgba(0, 0, 0, 0.15);
     padding: 15px;
     border-radius: 10px;
-    border: 1px solid var(--border-glass);
 }
 
 .theme-info-text {
     display: flex;
     flex-direction: column;
-    gap: 4px;
 }
 
 .theme-info-text span {
@@ -738,20 +688,9 @@ body {
     font-size: 15px;
     font-weight: 600;
     cursor: pointer;
-    box-shadow: 0 4px 15px var(--accent-glow);
 }
 
-/* الأنميشن والتحويلات */
-@keyframes spin {
-    100% { transform: rotate(-360deg); }
-}
-
-@keyframes wave-glow {
-    0% { right: 100%; }
-    100% { right: -40px; }
-}
-
-/* إخفاء التبويبات غير النشطة */
-#tab-settings {
-    display: none;
-}
+/* الأنميشن والنبضات المتوهجة لخطوط الانتظار والتحميل الفوري */
+@keyframes spin { 100% { transform: rotate(-360deg); } }
+@keyframes wave-glow { 0% { right: 100%; } 100% { right: -40px; } }
+#tab-settings { display: none; }

@@ -21,7 +21,7 @@
             <i class="fa-solid fa-sliders"></i>
         </button>
         <div class="sidebar-footer">
-            <span id="global-cost-display" title="إجمالي استهلاك رصيد العمليات الحالية"><i class="fa-solid fa-wallet"></i> $0.0000</span>
+            <span id="global-cost-display" title="إجمالي استهلاك رصيد العمليات الحالية"><i class="fa-solid fa-wallet"></i> ¢0.00</span>
         </div>
     </nav>
 
@@ -29,43 +29,85 @@
         
         <div id="tab-dev" class="main-tab-content active">
             
+            <div class="right-preview-workspace" id="right-preview-workspace">
+                
+                <div class="preview-control-toolbar" style="flex-wrap: wrap; gap: 10px;">
+                    <div class="github-bar" style="flex-grow: 1; min-width: 200px;">
+                        <i class="fa-brands fa-github"></i>
+                        <input type="text" id="github-url-input" placeholder="github.com/username/repository" dir="ltr" style="background:transparent; border:none; color:var(--text-primary); outline:none; width: 60%; font-size: 13px;">
+                        <button class="github-btn" onclick="triggerGitHubImport()">جلب الملفات</button>
+                    </div>
+
+                    <div class="toolbar-db-switches">
+                        <button class="db-toggle-btn active" id="view-user-btn" onclick="setPreviewMode('user')">المستخدم</button>
+                        <button class="db-toggle-btn" id="view-admin-btn" onclick="setPreviewMode('admin')">الأدمن</button>
+                        <button class="db-toggle-btn" id="view-both-btn" onclick="setPreviewMode('both')">كلاهما</button>
+                    </div>
+
+                    <div class="toolbar-db-switches">
+                        <button class="db-toggle-btn active" id="btn-db-local" onclick="toggleDatabaseMode('local')">
+                            <i class="fa-solid fa-database"></i> محلي
+                        </button>
+                        <button class="db-toggle-btn" id="btn-db-real" onclick="toggleDatabaseMode('real')">
+                            <i class="fa-solid fa-cloud-bolt"></i> حقيقي
+                        </button>
+                    </div>
+                    <button class="external-preview-btn" onclick="generateExternalPreviewLink()">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i> خارجية
+                    </button>
+                </div>
+
+                <div class="github-progress-wrapper" id="github-progress-wrapper" style="position: relative; border-radius: 0;">
+                    <div class="github-progress-line" id="github-progress-line">
+                        <div class="progress-glow"></div>
+                    </div>
+                </div>
+
+                <div class="preview-frames-split-container" id="preview-frames-split-container">
+                    
+                    <div class="preview-frame-wrapper" id="preview-user-wrapper">
+                        <div class="frame-label-header"><i class="fa-solid fa-mobile-screen-button"></i> واجهة المتجر (المستخدم)</div>
+                        <div class="iframe-inner-holder user-phone-mode">
+                            <iframe id="iframe-user-app" class="preview-iframe"></iframe>
+                        </div>
+                    </div>
+
+                    <div class="preview-frame-wrapper hidden" id="preview-admin-wrapper">
+                        <div class="frame-label-header"><i class="fa-solid fa-chart-line"></i> لوحة التحكم (الأدمن)</div>
+                        <div class="iframe-inner-holder">
+                            <iframe id="iframe-admin-app" class="preview-iframe"></iframe>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="drag-resizable-bar" id="drag-resizable-bar" title="اضغط واسحب يميناً أو يساراً للتحكم بمساحة محاكي المعاينة">
+                <div class="drag-indicator-line"></div>
+            </div>
+
             <div class="left-workspace" id="left-workspace">
                 
                 <section class="chat-panel">
                     <div class="panel-header">
-                        <span><i class="fa-solid fa-brain-circuit"></i> المستشار الهندسي والذكاء المالي</span>
+                        <span><i class="fa-solid fa-brain-circuit"></i> المستشار الهندسي</span>
                         <div class="top-preview-selector">
-                            <label>الهدف الأولي لجلب GitHub:</label>
                             <select id="github-target-select">
-                                <option value="user-app">واجهة تطبيق المستخدم (Client)</option>
-                                <option value="admin-app">لوحة تحكم المسؤول (Admin)</option>
+                                <option value="user-app">محادثة بخصوص المستخدم</option>
+                                <option value="admin-app">محادثة بخصوص الأدمن</option>
                             </select>
                         </div>
                     </div>
 
                     <div class="chat-messages" id="chat-messages">
                         <div class="message ai">
-                            مرحباً باسم! تم تصحيح الأكواد وبنيات النصوص بالكامل. جميع الوظائف والأزرار المحيطة بك نشطة وتعمل بكفاءة 100%.
+                            مرحباً باسم! تم تصحيح الأكواد وبنيات النصوص بالكامل. تم نقل المعاينة لليمين والمحادثة لليسار.
                             <br><br>
-                            يمكنك الآن جلب مستودع مشروعك من **GitHub** ومتابعة خط التحميل التدريجي الفني، مع إمكانية التنقل الحر بمستويات الذكاء الثلاثة فوق صندوق الإدخال لإجراء تعديلات جراحية موضعية حية على الأسطر وحساب رصيد التوكنات مباشرة.
+                            تم ربط أداة الذكاء الاصطناعي بنجاح، يمكنك وضع API Key في الإعدادات لبدء المحادثة الحقيقية المباشرة وحساب التكلفة الفعلي.
                         </div>
                     </div>
 
                     <div class="chat-control-area">
-                        
-                        <div class="github-container">
-                            <div class="github-bar">
-                                <i class="fa-brands fa-github"></i>
-                                <input type="text" id="github-url-input" placeholder="github.com/username/repository" dir="ltr">
-                                <button class="github-btn" onclick="triggerGitHubImport()">جلب الملفات</button>
-                            </div>
-                            <div class="github-progress-wrapper" id="github-progress-wrapper">
-                                <div class="github-progress-line" id="github-progress-line">
-                                    <div class="progress-glow"></div>
-                                </div>
-                            </div>
-                        </div>
-
                         <div class="model-switcher-bar">
                             <button class="model-btn active" id="btn-model-flash" onclick="setAIModel('flash')">
                                 <i class="fa-solid fa-bolt"></i> اقتصادي (Flash)
@@ -79,65 +121,32 @@
                         </div>
 
                         <div class="chat-input-box">
-                            <textarea id="chat-input" placeholder="اطلب تعديلاً موضعياً لحماية مشروعك من التخريب، أو قل لي 'ابني نظام الأدمن' لفتح المعاينة المزدوجة..."></textarea>
+                            <textarea id="chat-input" placeholder="اطلب التعديلات، سيتم الاتصال عبر API مباشرة..."></textarea>
                             <button class="send-message-btn" onclick="processChatMessage()"><i class="fa-solid fa-paper-plane"></i></button>
                         </div>
                     </div>
                 </section>
 
                 <section class="code-panel">
-                    <div class="panel-header-tabs" id="code-tabs-container">
-                        <button class="code-tab-btn active" onclick="switchCodeFile('user-app')">تطبيق المستخدم</button>
-                        <button class="code-tab-btn" id="tab-btn-admin" onclick="switchCodeFile('admin-app')">لوحة التحكم (الأدمن)</button>
+                    <div class="panel-header-tabs" id="code-tabs-container" style="display:flex; justify-content:space-between; align-items:center; padding-right:10px;">
+                        <div style="display:flex; align-items:center; gap:5px;">
+                            <select id="app-selector" onchange="switchAppFile(this.value)" style="background:transparent; border:1px solid var(--border-glass); color:var(--accent-green); font-family:Cairo; font-size:12px; outline:none; cursor:pointer; padding:5px; border-radius:5px;">
+                                <option value="user">تطبيق المستخدم</option>
+                                <option value="admin">لوحة الأدمن</option>
+                            </select>
+                            <button class="code-tab-btn active" id="tab-html" onclick="switchCodeFile('html')">HTML</button>
+                            <button class="code-tab-btn" id="tab-css" onclick="switchCodeFile('css')">CSS</button>
+                            <button class="code-tab-btn" id="tab-js" onclick="switchCodeFile('js')">JS</button>
+                        </div>
                     </div>
                     <div class="editor-workspace">
                         <div class="editor-action-overlay">
                             <button class="editor-action-btn" onclick="copyCurrentCode()"><i class="fa-solid fa-copy"></i> نسخ الكود</button>
-                            <button class="editor-action-btn run" onclick="forceUpdatePreview()"><i class="fa-solid fa-rotate"></i> تحديث المعاينة</button>
                         </div>
-                        <textarea id="code-editor-textarea" spellcheck="false" autocomplete="off" placeholder="هنا تظهر وتحدث الشفرات البرمجية والمصادر المجلوبة..."></textarea>
+                        <textarea id="code-editor-textarea" spellcheck="false" autocomplete="off" placeholder="هنا تظهر وتحدث الشفرات البرمجية والمصادر المجلوبة..." oninput="forceUpdatePreview()"></textarea>
                     </div>
                 </section>
 
-            </div>
-
-            <div class="drag-resizable-bar" id="drag-resizable-bar" title="اضغط واسحب يميناً أو يساراً للتحكم بمساحة محاكي المعاينة">
-                <div class="drag-indicator-line"></div>
-            </div>
-
-            <div class="right-preview-workspace" id="right-preview-workspace">
-                
-                <div class="preview-control-toolbar">
-                    <div class="toolbar-db-switches">
-                        <button class="db-toggle-btn active" id="btn-db-local" onclick="toggleDatabaseMode('local')">
-                            <i class="fa-solid fa-database"></i> بيئة تجربة محلية (Sandbox)
-                        </button>
-                        <button class="db-toggle-btn" id="btn-db-real" onclick="toggleDatabaseMode('real')">
-                            <i class="fa-solid fa-cloud-bolt"></i> قاعدة بيانات حقيقية
-                        </button>
-                    </div>
-                    <button class="external-preview-btn" onclick="generateExternalPreviewLink()">
-                        <i class="fa-solid fa-arrow-up-right-from-square"></i> معاينة خارجية مستقلة
-                    </button>
-                </div>
-
-                <div class="preview-frames-split-container" id="preview-frames-split-container">
-                    
-                    <div class="preview-frame-wrapper" id="preview-user-wrapper">
-                        <div class="frame-label-header"><i class="fa-solid fa-mobile-screen-button"></i> واجهة المتجر / التطبيق (جوال)</div>
-                        <div class="iframe-inner-holder user-phone-mode">
-                            <iframe id="iframe-user-app" class="preview-iframe"></iframe>
-                        </div>
-                    </div>
-
-                    <div class="preview-frame-wrapper hidden" id="preview-admin-wrapper">
-                        <div class="frame-label-header"><i class="fa-solid fa-chart-line"></i> لوحة التحكم الإدارية (Admin Panel)</div>
-                        <div class="iframe-inner-holder">
-                            <iframe id="iframe-admin-app" class="preview-iframe"></iframe>
-                        </div>
-                    </div>
-
-                </div>
             </div>
 
         </div>
@@ -145,7 +154,7 @@
         <div id="tab-settings" class="main-tab-content">
             <div class="settings-view-wrapper">
                 <h2>إعدادات بيئة التطوير والنظام المحلي</h2>
-                <p class="subtitle">قم بتهيئة وحفظ الرموز السرية لتفعيل المزامنة المباشرة، مع خيارات التبديل المرن بين الوضع الليلي والنهاري لحماية العين.</p>
+                <p class="subtitle">قم بتهيئة وحفظ الرموز السرية لتفعيل المزامنة المباشرة والدردشة الحقيقية مع الذكاء الاصطناعي.</p>
                 
                 <div class="setting-card-group">
                     <label><i class="fa-solid fa-key"></i> مفتاح واجهة برمجة تطبيقات جوجل (Gemini API Key)</label>
@@ -156,7 +165,7 @@
                 </div>
 
                 <div class="setting-card-group">
-                    <label><i class="fa-brands fa-github"></i> رمز أمان الوصول لمستودعات GitHub الخاصة (Access Token - اختياري)</label>
+                    <label><i class="fa-brands fa-github"></i> رمز أمان الوصول لمستودعات GitHub الخاصة</label>
                     <div class="input-password-wrapper">
                         <input type="password" id="input-github-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx">
                         <button type="button" onclick="toggleInputVisibility('input-github-token')"><i class="fa-solid fa-eye"></i></button>
@@ -169,7 +178,7 @@
                         <span>التحويل بين نمط التصميم الشفاف المعتم العالي وبين الوضع النهاري.</span>
                     </div>
                     <button class="theme-switch-toggle-btn" onclick="toggleInterfaceTheme()">
-                        <i class="fa-solid fa-moon"></i> تغيير وضع الإضاءة
+                        <i class="fa-solid fa-moon"></i> تغيير وضع الإضاءة (ليلي / نهاري)
                     </button>
                 </div>
 

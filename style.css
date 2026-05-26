@@ -229,7 +229,7 @@ body {
     justify-content: space-between;
 }
 
-/* لوحة التحكم السفلية لـ صندوق جلب GitHub وأزرار مستويات الذكاء */
+/* لوحة التحكم السفلية لـ أزرار مستويات الذكاء */
 .chat-control-area {
     padding: 18px;
     border-top: 1px solid var(--border-glass);
@@ -288,11 +288,7 @@ body {
     width: 100%;
     height: 4px;
     background: rgba(0, 0, 0, 0.3);
-    border-radius: 0 0 10px 10px;
     overflow: hidden;
-    position: absolute;
-    bottom: 0;
-    left: 0;
     display: none;
 }
 
@@ -693,4 +689,4 @@ body {
 /* الأنميشن والنبضات المتوهجة لخطوط الانتظار والتحميل الفوري */
 @keyframes spin { 100% { transform: rotate(-360deg); } }
 @keyframes wave-glow { 0% { right: 100%; } 100% { right: -40px; } }
-#tab-settings { display: none; }
+/* تم إزالة سطر الإخفاء الخاص بـ tab-settings لكي يعمل زر التبديل للإعدادات بشكل سليم */
